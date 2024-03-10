@@ -1,0 +1,86 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-icon-button routerLink="/">
+            <mat-icon>exit_to_app</mat-icon>
+        </button>
+        <span class="example-spacer"></span>
+        <h1>Cuentas en revisión</h1>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card class="m-4">
+    <mat-card-header>
+        <mat-card-title>
+            <h2>Nuevas cuentas</h2>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="mb-2"></mat-divider>
+    <mat-card-content>
+        <mat-card-content>
+            <p>
+                A continuación se enumeran las personas que han solicitado abrir una cuenta bancaria. Por favor, revise cuidadosamente la información antes de aprobar o rechazar la solicitud. Puede expandir los detalles de cada persona para obtener más información.
+            </p>
+        </mat-card-content>
+
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="m-4">
+    <mat-card-header>
+        <mat-card-title>
+            <h2>Nuevas cuentas en aprobación</h2>
+            <small>Cantidad de cuentas esperando aprobación: {{ count() }}</small>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="mb-2"></mat-divider>
+    <mat-card-content>
+
+        @if (loading) {
+            <mat-spinner diameter="25"></mat-spinner> Procesando solicitud...
+        }
+
+        @if (loadingAccounts) {
+            <mat-spinner></mat-spinner>
+        } @else {
+            <mat-table [dataSource]="accounts">
+
+                <ng-container matColumnDef="nombres completos">
+                    <mat-header-cell *matHeaderCellDef>Nombres Completo</mat-header-cell>
+                    <mat-cell *matCellDef="let newAccount">{{ newAccount.names + " " + newAccount.lastnames }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cedula">
+                    <mat-header-cell *matHeaderCellDef>Cédula</mat-header-cell>
+                    <mat-cell *matCellDef="let newAccount">{{ newAccount.ci }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="correo">
+                    <mat-header-cell *matHeaderCellDef>Correo Electrónico</mat-header-cell>
+                    <mat-cell *matCellDef="let newAccount">{{ newAccount.email }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="sexo">
+                    <mat-header-cell *matHeaderCellDef>Sexo</mat-header-cell>
+                    <mat-cell *matCellDef="let newAccount">{{ newAccount.sexo }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="edad">
+                    <mat-header-cell *matHeaderCellDef>Edad</mat-header-cell>
+                    <mat-cell *matCellDef="let newAccount">{{ newAccount.age }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                    <mat-cell *matCellDef="let newAccount" class="button-container">
+                        <button mat-raised-button color="primary" (click)="info(newAccount)">
+                            Expandir
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+            </mat-table>
+        }
+
+    </mat-card-content>
+</mat-card>

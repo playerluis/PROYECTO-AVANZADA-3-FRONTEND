@@ -1,0 +1,95 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-icon-button routerLink="/">
+            <mat-icon>exit_to_app</mat-icon>
+        </button>
+        <span class="example-spacer"></span>
+        <h1>Revisión de identidades</h1>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-card class="m-4">
+    <mat-card-header>
+        <mat-card-title>
+            <h2>Registro de identidades pendientes</h2>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="mb-2"></mat-divider>
+    <mat-card-content>
+        <mat-card-content>
+            <p>
+                Aquí puedes revisar los comprobantes de identidad de los usuarios que han solicitado abrir una cuenta bancaria.
+                Asegúrate de verificar que la imagen sea clara y que la cédula sea legible, y sobre todo, verifica que el número de cédula coincida con el que el usuario ingresó en el formulario de registro.
+            </p>
+        </mat-card-content>
+
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="m-4">
+    <mat-card-header>
+        <mat-card-title>
+            <h2>Cuentas pendientes</h2>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="mb-2"></mat-divider>
+    <mat-card-content>
+
+        @if (loading) {
+            <mat-spinner diameter="25"></mat-spinner> Procesando solicitud...
+        }
+
+        @if (loadingAccounts) {
+            <mat-spinner></mat-spinner>
+        } @else {
+            <mat-table [dataSource]="pendingIndentityAccounts">
+
+                <ng-container matColumnDef="Nombre Completo">
+                    <mat-header-cell *matHeaderCellDef>Nombre completo</mat-header-cell>
+                    <mat-cell *matCellDef="let pendingAccount">
+                        {{ pendingAccount.completeName }}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Correo">
+                    <mat-header-cell *matHeaderCellDef>Correo</mat-header-cell>
+                    <mat-cell *matCellDef="let pendingAccount">{{ pendingAccount.email }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="N# Cedula">
+                    <mat-header-cell *matHeaderCellDef>Cedula</mat-header-cell>
+                    <mat-cell *matCellDef="let pendingAccount">{{ pendingAccount.ci }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Imagen">
+                    <mat-header-cell *matHeaderCellDef>Imagen</mat-header-cell>
+                    <mat-cell *matCellDef="let pendingAccount">
+                        <button (click)="showImage(pendingAccount.imageUrl, pendingAccount.ci)" mat-raised-button color="primary">
+                            <mat-icon>image</mat-icon>
+                            Ver cedula
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Acciones">
+                    <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                    <mat-cell *matCellDef="let pendingAccount">
+                        <button (click)="accept(pendingAccount)" mat-raised-button color="primary">
+                            <mat-icon>heck_circle</mat-icon>
+                            Aceptar
+                        </button>
+                        <button (click)="deny(pendingAccount)" mat-raised-button color="warn" style="margin-left: 10px;">
+                            <mat-icon>close</mat-icon>
+                            Denegar
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+            </mat-table>
+
+        }
+
+    </mat-card-content>
+</mat-card>

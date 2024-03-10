@@ -1,0 +1,72 @@
+@if (!loading) {
+    <mat-toolbar color="primary">
+        <span>Envio de la cedula identidad</span>
+    </mat-toolbar>
+    @if (!isSend) {
+        <mat-card class="m-4">
+            <mat-card-header>
+                <mat-card-title>
+                    <h2>SUBA LA CÉDULA DE IDENTIDAD</h2>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-divider class="mb-2"></mat-divider>
+            <mat-card-content>
+                <mat-card-content>
+                    <p>
+                        Tome una foto de su cédula de identidad en donde aparezca usted y el documento de identidad,
+                        asegúrese de que la foto sea clara y legible, para que se puede distinguir la informacion de la cedula.
+                    </p>
+                </mat-card-content>
+            </mat-card-content>
+        </mat-card>
+    }
+    <mat-card class="m-4">
+        @if (!isSend) {
+            <mat-card-header>
+                <mat-card-title>
+                    <h3>SELECCIONE LA FOTO DE LA CEDULA</h3>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-divider class="mb-2"></mat-divider>
+            <mat-card-content>
+                <mat-card-content>
+                    <div class="d-flex justify-content-center">
+                        <input #Input hidden type="file" onclick="this.value=null" (change)="imageFileChange($event)" accept="image/*">
+                        <button mat-flat-button color="primary" (click)="Input.click()">
+                            <mat-icon>image</mat-icon>
+                            Seleccionar foto
+                        </button>
+                    </div>
+                </mat-card-content>
+                @if (this.fotoCedula) {
+                    <div class="d-flex justify-content-center">
+                        <img [src]="fotoCedula" alt="Foto de la cedula" class="img-fluid w-50 mt-2">
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-2">
+                        <button mat-flat-button color="primary" (click)="enviarCedula()">
+                            <mat-icon>send</mat-icon>
+                            Enviar cédula
+                        </button>
+                    </div>
+                }
+            </mat-card-content>
+        } @else {
+            <mat-card-header>
+                <mat-card-title>
+                    <H2>GRACIAS POR CONFIAR EN NOSOTROS</H2>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-divider class="mb-2"></mat-divider>
+            <mat-card-content>
+                <mat-card-content>
+                    <p>
+                        Su cédula de identidad ha sido enviada con éxito, en breve nos pondremos en contacto con usted.
+                    </p>
+                </mat-card-content>
+            </mat-card-content>
+        }
+    </mat-card>
+} @else {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}

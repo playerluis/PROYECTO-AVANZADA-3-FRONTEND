@@ -1,0 +1,331 @@
+{
+  "version": "6.0",
+  "nxVersion": "18.0.4",
+  "deps": {
+    "@angular/animations": "^17.1.0",
+    "@angular/cdk": "^17.1.0",
+    "@angular/common": "^17.1.0",
+    "@angular/compiler": "^17.1.0",
+    "@angular/core": "^17.1.0",
+    "@angular/forms": "^17.1.0",
+    "@angular/material": "^17.1.0",
+    "@angular/platform-browser": "^17.1.0",
+    "@angular/platform-browser-dynamic": "^17.1.0",
+    "@angular/router": "^17.1.0",
+    "@nrwl/angular": "^18.0.4",
+    "bootstrap": "^5.3.2",
+    "install": "^0.13.0",
+    "material-design-icons": "^3.0.1",
+    "npm": "^10.4.0",
+    "rxjs": "~7.8.0",
+    "sweetalert2": "^11.10.5",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.3",
+    "@angular-devkit/build-angular": "^17.1.3",
+    "@angular/cli": "^17.1.3",
+    "@angular/compiler-cli": "^17.1.0",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.11.17",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.3.2"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "nonProjectFiles": [],
+    "projectFileMap": {
+      "FRONTEND": [
+        {
+          "file": ".editorconfig",
+          "hash": "17241496168097493888"
+        },
+        {
+          "file": ".gitignore",
+          "hash": "4689145951703824387"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "11934160580685414355"
+        },
+        {
+          "file": ".vscode/launch.json",
+          "hash": "17406702432687230417"
+        },
+        {
+          "file": ".vscode/tasks.json",
+          "hash": "10093397977228577162"
+        },
+        {
+          "file": "README.md",
+          "hash": "7553834690875498136"
+        },
+        {
+          "file": "angular.json",
+          "hash": "3304826107608434783"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "3123965770428752515"
+        },
+        {
+          "file": "package.json",
+          "hash": "13942883360029610397",
+          "deps": [
+            "npm:@angular/animations",
+            "npm:@angular/cdk",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/material",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-browser-dynamic",
+            "npm:@angular/router",
+            "npm:@nrwl/angular",
+            "npm:bootstrap",
+            "npm:install",
+            "npm:material-design-icons",
+            "npm:npm",
+            "npm:rxjs",
+            "npm:sweetalert2",
+            "npm:tslib",
+            "npm:zone.js",
+            "npm:@angular-devkit/build-angular",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@types/jasmine",
+            "npm:@types/node",
+            "npm:jasmine-core",
+            "npm:karma",
+            "npm:karma-chrome-launcher",
+            "npm:karma-coverage",
+            "npm:karma-jasmine",
+            "npm:karma-jasmine-html-reporter",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "src/app/app.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/app.component.html",
+          "hash": "6259934606554011337"
+        },
+        {
+          "file": "src/app/app.component.spec.ts",
+          "hash": "13282083633908373026",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "src/app/app.component.ts",
+          "hash": "3978488580803121164",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "src/app/app.config.ts",
+          "hash": "16465538380260921448",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common",
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "src/app/app.routes.ts",
+          "hash": "11738248149383652150",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "src/app/models/Accounts.ts",
+          "hash": "1611586008581184685"
+        },
+        {
+          "file": "src/app/models/FormControlDefinition.ts",
+          "hash": "6000755109787918785",
+          "deps": [
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "src/app/models/PendingIndentityAccount.ts",
+          "hash": "17194793255899966003"
+        },
+        {
+          "file": "src/app/models/RejectData.ts",
+          "hash": "2528946105897433374"
+        },
+        {
+          "file": "src/app/pages/comprobar-identidad/comprobar-identidad.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/pages/comprobar-identidad/comprobar-identidad.component.html",
+          "hash": "16239194105104134784"
+        },
+        {
+          "file": "src/app/pages/comprobar-identidad/comprobar-identidad.component.ts",
+          "hash": "13212868902446132107",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "npm:sweetalert2",
+            "npm:rxjs",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "src/app/pages/formulario-solicitud-cuenta/formulario-solicitud-cuenta.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/pages/formulario-solicitud-cuenta/formulario-solicitud-cuenta.component.html",
+          "hash": "10907510698391566561"
+        },
+        {
+          "file": "src/app/pages/formulario-solicitud-cuenta/formulario-solicitud-cuenta.component.ts",
+          "hash": "7916306738195460138",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/material",
+            "npm:sweetalert2",
+            "npm:rxjs",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "src/app/pages/imagen-cedula/imagen-cedula.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/pages/imagen-cedula/imagen-cedula.component.html",
+          "hash": "12854519642019619969"
+        },
+        {
+          "file": "src/app/pages/imagen-cedula/imagen-cedula.component.ts",
+          "hash": "17718533028978106552",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "npm:sweetalert2"
+          ]
+        },
+        {
+          "file": "src/app/pages/index/index.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/pages/index/index.component.html",
+          "hash": "1596696125595945912"
+        },
+        {
+          "file": "src/app/pages/index/index.component.ts",
+          "hash": "6826027363713384762",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "src/app/pages/nuevas-cuentas/nuevas-cuentas.component.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/app/pages/nuevas-cuentas/nuevas-cuentas.component.html",
+          "hash": "2897879443268113407"
+        },
+        {
+          "file": "src/app/pages/nuevas-cuentas/nuevas-cuentas.component.ts",
+          "hash": "15933066476102890670",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/material",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:sweetalert2",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "src/app/services/account-service.service.ts",
+          "hash": "15552937741615210520",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "src/app/validation/MyErrorStateMatcher.ts",
+          "hash": "17950430125487408436",
+          "deps": [
+            "npm:@angular/material",
+            "npm:@angular/core",
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "src/app/validation/MyValidators.ts",
+          "hash": "9227116605401087934",
+          "deps": [
+            "npm:@angular/forms"
+          ]
+        },
+        {
+          "file": "src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "src/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "src/index.html",
+          "hash": "18104160686291567598"
+        },
+        {
+          "file": "src/main.ts",
+          "hash": "4169901790405087765",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "src/styles.css",
+          "hash": "7794024166846645338"
+        },
+        {
+          "file": "tsconfig.app.json",
+          "hash": "11425722145610344301"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "1232621111412094714"
+        },
+        {
+          "file": "tsconfig.spec.json",
+          "hash": "5122839733245053999"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,113 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <button mat-icon-button routerLink="/">
+            <mat-icon>exit_to_app</mat-icon>
+        </button>
+        <span class="example-spacer"></span>
+        <h1>Solicitar cuenta</h1>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<main class="m-5">
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>
+                <h2>Solicitar cuenta</h2>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-divider class="mb-2"></mat-divider>
+        <mat-card-content class="container">
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="row">
+                @for (fcd of inputs; track fcd.name) {
+                    @if (fcd && fcd.control) {
+                        @if (fcd.type === 'checkbox') {
+                            <mat-checkbox [formControl]="fcd.control">{{ fcd.label }}</mat-checkbox>
+                            @if (matcher.isErrorState(fcd.control, null)) {
+                                <mat-error>
+                                    @if (fcd.control.errors) {
+
+                                        @if (fcd.control.hasError('notAcceptedTermsAndConditions')) {
+                                            Debe aceptar los <strong>términos y condiciones</strong>
+                                        }
+                                    }
+                                </mat-error>
+                            }
+                        } @else {
+                            <mat-form-field appearance="outline" class="col-12 col-md-6">
+                                <mat-label>{{ fcd.label }}</mat-label>
+                                @if (fcd.selectOptions) {
+                                    <mat-select
+                                        [id]="fcd.name"
+                                        [formControl]="fcd.control"
+                                        [errorStateMatcher]="matcher"
+                                    >
+                                        @for (option of fcd.selectOptions; track option; ) {
+                                            <mat-option [value]="option">{{ option }}</mat-option>
+                                        } @empty {
+                                            <mat-option value="">No hay opciones</mat-option>
+                                        }
+                                    </mat-select>
+                                } @else if (fcd.type === 'textarea') {
+                                    <textarea
+                                        matInput
+                                        [id]="fcd.name"
+                                        [formControl]="fcd.control"
+                                        [errorStateMatcher]="matcher"
+                                    ></textarea>
+                                } @else {
+                                    <input
+                                        matInput
+                                        [type]="fcd.type"
+                                        [id]="fcd.name"
+                                        [formControl]="fcd.control"
+                                        [errorStateMatcher]="matcher"
+                                    >
+                                }
+                                <mat-error>
+                                    @if (fcd.control.errors) {
+                                        {{ fcd.label }}
+                                        @if (fcd.control.hasError('required')) {
+                                            es <strong>requerido</strong>
+                                        } @else if (fcd.control.hasError('email')) {
+                                            debe ser un <strong>email</strong> valido
+                                        } @else if (fcd.control.hasError('minlength')) {
+                                            debe tener al menos {{ fcd.control.errors["minlength"]["requiredLength"] }} caracteres
+                                        } @else if (fcd.control.hasError('maxlength')) {
+                                            debe tener menos de {{ fcd.control.errors["maxlength"]["requiredLength"] }} caracteres
+                                        } @else if (fcd.control.hasError('pattern')) {
+                                            debe tener un formato válido: {{ fcd.control.errors["pattern"]["requiredPattern"] }}
+                                        } @else if (fcd.control.hasError('invalidCi')) {
+                                            no tiene una cedula válida
+                                        } @else if (fcd.control.hasError('invalidFormat')) {
+                                            no tiene un formato válido: {{ fcd.control.errors["invalidFormat"]["requiredFormat"] }}
+                                        } @else if (fcd.control.hasError('min')) {
+                                            debe ser mayor o igual a {{ fcd.control.errors["min"]["min"] }}
+                                        } @else if (fcd.control.hasError('max')) {
+                                            no puede ser mayor a {{ fcd.control.errors["max"]["max"] }}
+                                        } @else if (fcd.control.hasError('notMatch')) {
+                                            no coincide con {{ fcd.control.errors["notMatch"]["requiredMatch"] }}
+                                        }
+                                    }
+                                </mat-error>
+                            </mat-form-field>
+                        }
+                    }
+                }
+
+                @if (sending) {
+                    <button mat-raised-button color="primary" type="button" class="w-50 mx-auto my-2" disabled>
+                        <mat-spinner diameter="20" class="mr-2"></mat-spinner>
+                        Enviando
+                    </button>
+                } @else {
+                    <button mat-raised-button color="primary" type="submit" class="w-50 mx-auto my-2">
+                        Solicitar cuenta
+                    </button>
+                }
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+</main>
