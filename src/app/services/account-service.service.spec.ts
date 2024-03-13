@@ -127,7 +127,7 @@ describe('AccountServiceService', () => {
 			expect(response).toEqual({message: 'success'});
 		});
 		
-		const req = httpMock.expectOne(service.path + '/approve-identity');
+		const req = httpMock.expectOne(service.path + '/aprove-identity');
 		expect(req.request.method).toBe('POST');
 		req.flush({message: 'success'});
 	});

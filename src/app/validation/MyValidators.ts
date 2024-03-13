@@ -18,7 +18,7 @@ export default class MyValidators {
 			
 			const validLength = 10;
 			
-			if (!/^[0-9]{10}$/.test(value)) {
+			if (!/^\d{10}$/.test(value)) {
 				return {'invalidFormat': {requiredFormat: '##########',},};
 			}
 			

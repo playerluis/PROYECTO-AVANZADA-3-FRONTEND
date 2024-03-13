@@ -2,7 +2,6 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ImagenCedulaComponent} from './imagen-cedula.component';
 import {ActivatedRoute} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {AccountServiceService, Message} from "../../services/account-service.service";
 import {of} from "rxjs";
@@ -65,5 +64,19 @@ describe('ImagenCedulaComponent', () => {
 	});
 	
 	
+	it('should emit event on image File change', () => {
+		const image = new File([""], "filename", {type: "image/png"});
+		component.fotoCedulaArchivo = image;
+		const event = {
+			target: {
+				files: {
+					item: (_: number) => image
+				},
+				result: new ArrayBuffer(1)
+			}
+		}
+		component.imageFileChange(event as unknown as Event);
+		expect(component.fotoCedulaArchivo).toBeTruthy();
+	});
 	
 });

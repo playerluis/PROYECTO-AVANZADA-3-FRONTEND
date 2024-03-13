@@ -5,7 +5,7 @@ import {AccountServiceService, Message} from "../../services/account-service.ser
 import {ActivatedRoute} from "@angular/router";
 import Account from "../../models/Accounts";
 import {of} from "rxjs";
-import {BrowserAnimationsModule, NoopAnimationsModule, provideAnimations} from "@angular/platform-browser/animations";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('FormularioSolicitudCuentaComponent', () => {
 	let component: FormularioSolicitudCuentaComponent;
@@ -66,7 +66,7 @@ describe('FormularioSolicitudCuentaComponent', () => {
 			names: 'John',
 			lastnames: 'Doe',
 			email: 'aaa',
-			ci: '251411514',
+			ci: '2300826355',
 			sexo: 'M',
 			age: 25,
 			reason: 'Test reason',

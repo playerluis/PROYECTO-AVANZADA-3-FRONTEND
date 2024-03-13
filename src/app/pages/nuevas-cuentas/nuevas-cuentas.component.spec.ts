@@ -4,7 +4,7 @@ import {NuevasCuentasComponent} from './nuevas-cuentas.component';
 import {ActivatedRoute} from "@angular/router";
 import {AccountServiceService, Message} from "../../services/account-service.service";
 import Account from "../../models/Accounts";
-import {of} from "rxjs";
+import {Observable, of, throwError} from "rxjs";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import Swal, {SweetAlertResult} from "sweetalert2";
 
@@ -57,7 +57,6 @@ describe('IndexComponent', () => {
 		
 		mockAccountService.getNewAccounts.and.returnValue(of(accounts));
 		
-		
 		fixture = TestBed.createComponent(NuevasCuentasComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
@@ -73,6 +72,24 @@ describe('IndexComponent', () => {
 		await component.ngOnInit();
 		expect(mockAccountService.getNewAccounts).toHaveBeenCalled();
 		expect(component.accounts).toEqual(accounts);
+	});
+	
+	
+	it('should call getNewAccounts on loadAccounts [ERROR]', async () => {
+		
+		mockAccountService.getNewAccounts.and.returnValue(throwError(() => new Error('test')));
+		
+		spyOn(Swal, 'fire').and.returnValue(Promise.resolve<SweetAlertResult>({
+			dismiss: Swal.DismissReason.cancel,
+			isConfirmed: false,
+			isDenied: false,
+			value: undefined,
+			isDismissed: true
+		}));
+		
+		await component.loadAccounts().then(() => {}).catch(() => {});
+		
+		expect(mockAccountService.getNewAccounts).toHaveBeenCalled();
 	});
 	
 	it('should approve the first step', async () => {

@@ -9,7 +9,6 @@ export class AccountServiceService {
 	
 	path = 'http://localhost:8080/account';
 	
-	//path = '/account';
 	
 	constructor(private http: HttpClient) {
 	}

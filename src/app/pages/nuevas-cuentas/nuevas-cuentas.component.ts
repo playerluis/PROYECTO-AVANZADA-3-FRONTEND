@@ -71,26 +71,27 @@ export class NuevasCuentasComponent implements OnInit {
 	async loadAccounts(): Promise<void> {
 		
 		this.loadingAccounts = true;
-		return new Promise((resolve, reject) => {
-			this.service.getNewAccounts().subscribe({
+		
+		return new Promise<void>((resolve, reject) => {
+			this.service
+			.getNewAccounts()
+			.subscribe({
 				next: (accounts) => {
 					console.log(accounts)
 					this.accounts = accounts;
-					this.loadingAccounts = false;
 					resolve();
 				},
-				error: (err) => {
+				error: err => {
 					swaal.fire({
 						title: "Error",
 						icon: "error",
-						text: "No se pudieron obtener las cuentas: " + err.error?.message ? err.error.message : "",
+						text: "No se pudieron obtener las cuentas: " + err && (err.error?.message ? err.error.message : ""),
 						timer: 2000
 					});
-					reject(new Error("No se pudieron obtener las cuentas: " + err.error?.message ? err.error.message : ""));
-					this.loadingAccounts = false;
+					reject(new Error("No se pudieron obtener las cuentas: " + err));
 				}
-			});
-		});
+			})
+		}).finally(() => this.loadingAccounts = false);
 		
 		
 	}
@@ -116,33 +117,27 @@ export class NuevasCuentasComponent implements OnInit {
 			cancelButtonText: 'Cancelar',
 			denyButtonText: 'Rechazar'
 		}).then(result => {
-			if (result.isConfirmed) {
-				this.accept(account);
-			}
-			if (result.isDenied) {
-				this.deny(account);
-			}
+			if (result.isConfirmed) this.accept(account);
+			if (result.isDenied) this.deny(account);
 		});
 	}
 	
 	async accept(account: Account): Promise<void> {
 		this.loading = true;
 		
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve, reject) => {
 			this.service.approveFirstStep(account.id).subscribe({
 				next: () => {
 					this.showMessage("Cuenta aceptada", "La cuenta cumplió con los requisitos de la primera fase, se le ha enviado un correo para continuar con el proceso de verificación de identidad", "success");
 					this.loadAccounts();
-					this.loading = false;
 					resolve();
 				},
 				error: (err) => {
 					this.showMessage("Error", "No se pudo aceptar la cuenta: " + (err.error?.message || ""), "error");
-					this.loading = false;
 					reject(new Error("No se pudo aceptar la cuenta: " + (err.error?.message || "")));
 				}
 			});
-		});
+		}).finally(() => this.loading = false);
 		
 	}
 	
@@ -174,16 +169,14 @@ export class NuevasCuentasComponent implements OnInit {
 					next: () => {
 						this.showMessage("Cuenta rechazada", "La cuenta ha sido rechazada", "success")
 						this.loadAccounts();
-						this.loading = false;
 						resolve();
 					},
 					error: (err) => {
 						this.showMessage("Error", "No se pudo rechazar la cuenta: " + (err.error?.message || ""), "error")
-						this.loading = false;
 						reject(new Error("No se pudo rechazar la cuenta: " + (err.error?.message || "")));
 					}
 				});
-			});
+			}).finally(() => this.loading = false);
 		});
 	}
 	
