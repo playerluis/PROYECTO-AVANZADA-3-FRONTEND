@@ -41,10 +41,6 @@ export class AccountServiceService {
 		);
 	}
 	
-	getAccounts() {
-		return this.http.get<Account[]>(this.path);
-	}
-	
 	getNewAccounts() {
 		return this.http.get<Account[]>(this.path + '/news');
 	}

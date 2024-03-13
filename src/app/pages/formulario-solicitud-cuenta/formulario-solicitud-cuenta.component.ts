@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FormControlDefinition} from "../../models/FormControlDefinition";
 import MyValidators from "../../validation/MyValidators";
@@ -16,7 +16,6 @@ import swaal from 'sweetalert2';
 import {AccountServiceService} from "../../services/account-service.service";
 import Account from "../../models/Accounts";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {Subscription} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {RouterLink} from "@angular/router";
 
@@ -42,7 +41,7 @@ import {RouterLink} from "@angular/router";
 	templateUrl: './formulario-solicitud-cuenta.component.html',
 	styleUrl: './formulario-solicitud-cuenta.component.css'
 })
-export class FormularioSolicitudCuentaComponent implements OnDestroy {
+export class FormularioSolicitudCuentaComponent implements OnInit {
 	
 	inputs: FormControlDefinition[] = [
 		{
@@ -131,14 +130,19 @@ export class FormularioSolicitudCuentaComponent implements OnDestroy {
 	
 	sending = false;
 	
-	private createAccountSubscription?: Subscription;
 	
 	constructor(private formBuilder: FormBuilder, public matcher: MyErrorStateMatcher, private service: AccountServiceService) {
+		this.form = new FormGroup({});
+	}
+	
+	ngOnInit() {
 		this.form = this.buildForm();
 	}
 	
 	controls = () => Object.values(this.form.controls);
+	
 	markAsTouched = (control: AbstractControl) => control.markAsTouched();
+	
 	
 	private buildForm() {
 		
@@ -150,29 +154,27 @@ export class FormularioSolicitudCuentaComponent implements OnDestroy {
 		return this.formBuilder.group(formControls);
 	}
 	
-	onSubmit(event: Event) {
-		event.preventDefault();
+	submit() {
 		
 		this.sending = true;
 		
 		if (this.form.valid) {
 			
 			const nuevaCuenta: Account = this.form.value;
-			console.log(nuevaCuenta);
 			
-			this.createAccountSubscription = this.service.createAccount(nuevaCuenta).subscribe({
-				next: (response) => {
+			this.service.createAccount(nuevaCuenta).subscribe({
+				next: response => {
 					console.log('Cuenta creada:', response);
-					this.showMessage('Éxito', response.message, 'success');
+					this.showMessage('Éxito', response.message, 'success').then();
 					this.form.markAsUntouched();
 					this.form.markAsPristine();
 					this.form.reset();
 					this.sending = false;
 				},
-				error: (err) => {
+				error: err => {
 					// Se ejecuta cuando ocurre un error
 					console.error('Error al crear la cuenta:', err);
-					this.showMessage('Error', err.error.message || err.error || 'Ocurrió un error', 'error');
+					this.showMessage('Error', err.error.message || err.error || 'Ocurrió un error', 'error').then();
 					this.sending = false;
 				}
 			});
@@ -184,8 +186,8 @@ export class FormularioSolicitudCuentaComponent implements OnDestroy {
 		this.sending = false;
 	}
 	
-	showMessage(title: string, body: string, icon: 'success' | 'error' = 'success') {
-		swaal.fire({
+	async showMessage(title: string, body: string, icon: 'success' | 'error' = 'success') {
+		await swaal.fire({
 			title: title,
 			text: body,
 			icon: icon,
@@ -193,9 +195,4 @@ export class FormularioSolicitudCuentaComponent implements OnDestroy {
 		});
 	}
 	
-	ngOnDestroy() {
-		if (this.createAccountSubscription) {
-			this.createAccountSubscription.unsubscribe();
-		}
-	}
 }

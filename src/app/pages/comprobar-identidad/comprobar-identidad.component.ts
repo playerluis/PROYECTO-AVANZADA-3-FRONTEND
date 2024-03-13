@@ -46,7 +46,7 @@ export class ComprobarIdentidadComponent implements OnInit {
 	}
 	
 	loadAccounts(): void {
-		this.service.getPendingIdentityAccounts().subscribe({
+		this.service.getPendingIdentityAccounts()?.subscribe({
 			next: (accounts) => {
 				console.log(accounts);
 				this.pendingIndentityAccounts = accounts.map<PendingIndentityAccount>((account) => {
@@ -55,7 +55,7 @@ export class ComprobarIdentidadComponent implements OnInit {
 						completeName: account.names + " " + account.lastnames,
 						email: account.email,
 						ci: account.ci,
-						imageUrl: account.picture as string,
+						pictureId: account.pictureId as string,
 						
 					};
 				});
@@ -77,12 +77,11 @@ export class ComprobarIdentidadComponent implements OnInit {
 		});
 	}
 	
-	deny(account: PendingIndentityAccount): void {
-		swaal.fire({
+	async deny(account: PendingIndentityAccount): Promise<void> {
+		await swaal.fire({
 			title: "Razón de rechazo",
 			input: "text",
 			confirmButtonText: "Enviar",
-			
 			showCancelButton: true,
 		}).then((result) => {
 			
@@ -99,6 +98,7 @@ export class ComprobarIdentidadComponent implements OnInit {
 				reason: result.value,
 				id: account.id,
 			};
+			
 			this.service.rejectAccount(account.id, reason.reason).subscribe({
 				next: () => {
 					this.showMessage("Cuenta rechazada.", "La cuenta ha sido rechazada", "success");

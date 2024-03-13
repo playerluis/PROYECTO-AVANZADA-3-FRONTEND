@@ -18,7 +18,7 @@
         <mat-divider class="mb-2"></mat-divider>
         <mat-card-content class="container">
 
-            <form [formGroup]="form" (ngSubmit)="onSubmit($event)" class="row">
+            <form [formGroup]="form" (ngSubmit)="$event.preventDefault(); submit()" class="row">
                 @for (fcd of inputs; track fcd.name) {
                     @if (fcd && fcd.control) {
                         @if (fcd.type === 'checkbox') {

@@ -3,5 +3,5 @@ export default interface PendingIndentityAccount {
 	completeName: string;
 	email: string;
 	ci: string;
-	imageUrl: string;
+	pictureId: string;
 }

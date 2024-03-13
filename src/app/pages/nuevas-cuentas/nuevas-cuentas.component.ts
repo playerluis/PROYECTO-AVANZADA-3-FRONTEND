@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -21,7 +21,6 @@ import {
 import {RouterLink} from '@angular/router';
 import swaal from "sweetalert2";
 import {AccountServiceService} from "../../services/account-service.service";
-import {Subscription} from "rxjs";
 import Account from "../../models/Accounts";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import RejectData from "../../models/RejectData";
@@ -54,54 +53,50 @@ import RejectData from "../../models/RejectData";
 	templateUrl: './nuevas-cuentas.component.html',
 	styleUrl: './nuevas-cuentas.component.css',
 })
-export class NuevasCuentasComponent implements OnDestroy, OnInit {
+export class NuevasCuentasComponent implements OnInit {
 	
 	columnas: string[] = ["nombres completos", "cedula", "correo", "sexo", "edad", "acciones"];
 	accounts: Account[] = [];
-	suscriptions: Subscription[] = [];
 	loadingAccounts: boolean = false;
 	loading: boolean = false;
 	
 	constructor(private service: AccountServiceService) {
 	}
 	
-	ngOnInit(): void {
-		this.loadAccounts();
+	async ngOnInit(): Promise<void> {
+		await this.loadAccounts();
 	}
 	
 	
-	ngOnDestroy(): void {
-		this.suscriptions.forEach(suscription => suscription.unsubscribe());
-	}
-	
-	
-	private loadAccounts(): void {
-		
-		this.suscriptions.forEach(suscription => suscription.unsubscribe());
+	async loadAccounts(): Promise<void> {
 		
 		this.loadingAccounts = true;
-		const suscription = this.service.getNewAccounts().subscribe({
-			next: (accounts) => {
-				console.log(accounts)
-				this.accounts = accounts;
-				this.loadingAccounts = false;
-			},
-			error: (err) => {
-				swaal.fire({
-					title: "Error",
-					icon: "error",
-					text: "No se pudieron obtener las cuentas: " + err.error?.message ? err.error.message : "",
-					timer: 2000
-				}).then()
-				this.loadingAccounts = false;
-			}
+		return new Promise((resolve, reject) => {
+			this.service.getNewAccounts().subscribe({
+				next: (accounts) => {
+					console.log(accounts)
+					this.accounts = accounts;
+					this.loadingAccounts = false;
+					resolve();
+				},
+				error: (err) => {
+					swaal.fire({
+						title: "Error",
+						icon: "error",
+						text: "No se pudieron obtener las cuentas: " + err.error?.message ? err.error.message : "",
+						timer: 2000
+					});
+					reject(new Error("No se pudieron obtener las cuentas: " + err.error?.message ? err.error.message : ""));
+					this.loadingAccounts = false;
+				}
+			});
 		});
 		
-		this.suscriptions.push(suscription);
+		
 	}
 	
-	info(account: Account): void {
-		swaal.fire({
+	async info(account: Account): Promise<void> {
+		await swaal.fire({
 			title: "Información de la nueva cuenta",
 			html: `
         <div style="text-align: left;">
@@ -130,68 +125,75 @@ export class NuevasCuentasComponent implements OnDestroy, OnInit {
 		});
 	}
 	
-	accept(account: Account): void {
+	async accept(account: Account): Promise<void> {
 		this.loading = true;
 		
-		const suscription = this.service.approveFirstStep(account.id).subscribe({
-			next: () => {
-				this.showMessage("Cuenta aceptada", "La cuenta cumplió con los requisitos de la primera fase, se le ha enviado un correo para continuar con el proceso de verificación de identidad", "success");
-				this.loadAccounts();
-				this.loading = false;
-			},
-			error: (err) => {
-				this.showMessage("Error", "No se pudo aceptar la cuenta: " + (err.error?.message || ""), "error");
-				this.loading = false;
-			}
+		return new Promise((resolve, reject) => {
+			this.service.approveFirstStep(account.id).subscribe({
+				next: () => {
+					this.showMessage("Cuenta aceptada", "La cuenta cumplió con los requisitos de la primera fase, se le ha enviado un correo para continuar con el proceso de verificación de identidad", "success");
+					this.loadAccounts();
+					this.loading = false;
+					resolve();
+				},
+				error: (err) => {
+					this.showMessage("Error", "No se pudo aceptar la cuenta: " + (err.error?.message || ""), "error");
+					this.loading = false;
+					reject(new Error("No se pudo aceptar la cuenta: " + (err.error?.message || "")));
+				}
+			});
 		});
 		
-		
-		this.suscriptions.push(suscription);
 	}
 	
-	deny(account: Account): void {
+	async deny(account: Account): Promise<void> {
 		
-		swaal.fire({
+		await swaal.fire({
 			title: "Razón de rechazo",
 			input: "text",
 			showCancelButton: true,
 			confirmButtonText: "Enviar",
-		}).then((result) => {
+		}).then(async (result) => {
 			
 			if (!result.isConfirmed) return;
 			
 			if (result.value === "") {
-				this.showMessage("Error", "La razón no puede estar vacía", "error");
+				this.showMessage("Error", "La razón no puede estar vacía", "error").then();
 				return;
 			}
 			
 			this.loading = true;
+			
 			const reason: RejectData = {
 				reason: result.value,
 				id: account.id,
 			};
-			const suscription = this.service.rejectAccount(account.id, reason.reason).subscribe({
-				next: () => {
-					this.showMessage("Cuenta rechazada", "La cuenta ha sido rechazada", "success");
-					this.loadAccounts();
-					this.loading = false;
-				},
-				error: (err) => {
-					this.showMessage("Error", "No se pudo rechazar la cuenta: " + (err.error?.message || ""), "error");
-					this.loading = false;
-				}
+			
+			return new Promise<void>((resolve, reject) => {
+				this.service.rejectAccount(account.id, reason.reason).subscribe({
+					next: () => {
+						this.showMessage("Cuenta rechazada", "La cuenta ha sido rechazada", "success")
+						this.loadAccounts();
+						this.loading = false;
+						resolve();
+					},
+					error: (err) => {
+						this.showMessage("Error", "No se pudo rechazar la cuenta: " + (err.error?.message || ""), "error")
+						this.loading = false;
+						reject(new Error("No se pudo rechazar la cuenta: " + (err.error?.message || "")));
+					}
+				});
 			});
-			this.suscriptions.push(suscription);
 		});
 	}
 	
-	showMessage(title: string, body: string, icon: 'success' | 'error' = 'success'): void {
-		swaal.fire({
+	async showMessage(title: string, body: string, icon: 'success' | 'error' = 'success'): Promise<void> {
+		await swaal.fire({
 			title: title,
 			text: body,
 			icon: icon,
 			confirmButtonText: 'Ok',
-		}).then();
+		});
 	}
 	
 	count(): number {

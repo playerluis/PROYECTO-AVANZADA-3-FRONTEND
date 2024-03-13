@@ -1,5 +1,5 @@
 import {CommonModule, NgOptimizedImage} from '@angular/common';
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
@@ -8,7 +8,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {MatDivider} from "@angular/material/divider";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Subscription} from "rxjs";
 import {AccountServiceService} from "../../services/account-service.service";
 import swaal from "sweetalert2";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -34,31 +33,26 @@ import {MatProgressBar} from "@angular/material/progress-bar";
 	templateUrl: './imagen-cedula.component.html',
 	styleUrls: ['./imagen-cedula.component.css']
 })
-export class ImagenCedulaComponent implements OnInit, OnDestroy {
+export class ImagenCedulaComponent implements OnInit {
 	
 	fotoCedula: ArrayBuffer | null = null;
 	fotoCedulaArchivo: File | null | undefined = null
 	idAccount: string | null = null;
 	isSend = false;
-	suscripcions: Subscription[] = [];
 	loading: boolean = true;
 	
 	constructor(private route: ActivatedRoute, private service: AccountServiceService, private router: Router) {
 	}
 	
-	ngOnDestroy(): void {
-		this.suscripcions.forEach(suscription => suscription.unsubscribe());
-	}
 	
 	ngOnInit(): void {
 		this.idAccount = this.route.snapshot.paramMap.get('token');
 		if (!this.idAccount) return;
-		const suscription = this.service.permitPicture(this.idAccount).subscribe({
-			error: async () => await this.router.navigate(['/solictud-cuenta']),
+		this.service.permitPicture(this.idAccount).subscribe({
+			error: () => this.router.navigate(['/solictud-cuenta']).then(),
 			complete: () => this.loading = false
 		});
 		
-		this.suscripcions.push(suscription);
 	}
 	
 	
@@ -83,10 +77,11 @@ export class ImagenCedulaComponent implements OnInit, OnDestroy {
 	enviarCedula() {
 		
 		if (!this.fotoCedulaArchivo || !this.idAccount) return;
+		
 		this.isSend = true;
 		this.loading = true;
-		
-		const suscription = this.service.uploadPicture(this.idAccount, this.fotoCedulaArchivo).subscribe({
+		console.log(1)
+		this.service.uploadPicture(this.idAccount, this.fotoCedulaArchivo).subscribe({
 			next: (response) => {
 				this.showMessage('Exito', response.message, 'success');
 				this.isSend = true;
@@ -98,16 +93,15 @@ export class ImagenCedulaComponent implements OnInit, OnDestroy {
 			}
 		});
 		
-		this.suscripcions.push(suscription);
 	}
 	
-	showMessage(title: string, body: string, icon: 'success' | 'error' = 'success') {
-		swaal.fire({
+	async showMessage(title: string, body: string, icon: 'success' | 'error' = 'success') {
+		await swaal.fire({
 			title: title,
 			text: body,
 			icon: icon,
 			confirmButtonText: 'Ok',
-		}).then();
+		});
 	}
 	
 }

@@ -8,7 +8,7 @@ export default interface Account {
 	sexo: string;
 	age: number;
 	reason: string;
-	picture?:  Buffer | Uint8Array | Blob | string
+	pictureId: string | null;
 	firstApprove: boolean;
 	secondApprove: boolean;
 }
